@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
 import Bootcamps from './components/Bootcamps/Bootcamps';
+import Bootcamp from './pages/Bootcamp/Bootcamp';
 
 function App() {
   const bootcampData = [
@@ -158,13 +159,43 @@ function App() {
       scholarships_available: false
     }
   ];
-  const [bootcamps, setBootcamps] = useState(bootcampData);
-  const [courses, setCourses] = useState(courseData);
+  const [bootcamps, setBootcamps] = useState([]);
+  useEffect(() => {
+    fetch('http://localhost:5000/api/v1/bootcamps', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(res => setBootcamps(res.data))
+      .catch(err => console.log(err));
+  }, []);
+
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    fetch('http://localhost:5000/api/v1/courses', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(res => setCourses(res.data))
+      .catch(err => console.log(err));
+  }, []);
+
   return (
     <Router>
       <div className='App'>
         <Navbar />
-        <Bootcamps bootcamps={bootcamps} courses={courses} />
+        <Route exact path='/'>
+          <Bootcamps bootcamps={bootcamps} courses={courses} />
+        </Route>
+        <Route path='/bootcamps/:name' component={Bootcamp} />
+        {/* <Route path='/bootcamps'>
+          <Bootcamp />
+        </Route> */}
       </div>
     </Router>
   );
