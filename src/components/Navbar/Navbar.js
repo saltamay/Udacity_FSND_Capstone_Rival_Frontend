@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
-    <nav className='navbar navbar-expand-md  fixed-top'>
+    <nav className='navbar navbar-expand-md navbar-light mb-5'>
       <div className='container'>
         <Link className='navbar-brand p-3 text-danger font-weight-bold' to='/'>
           RIVAL
@@ -20,7 +20,10 @@ export default function Navbar() {
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           <ul className='navbar-nav ml-auto'>
             <li className='nav-item'>
-              <button type='button' className='btn btn-outline-dark mr-2 p-0'>
+              <button
+                type='button'
+                className='btn btn-outline-secondary mr-2 p-0'
+              >
                 <Link className='nav-link text-dark' to='/login'>
                   <i className='fas fa-sign-in-alt'></i> LOGIN
                 </Link>
