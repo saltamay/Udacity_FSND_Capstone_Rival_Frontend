@@ -39,16 +39,11 @@ export default function Navbar() {
                 </li>
                 <li className='nav-item'>
                   <button type='button' className='btn btn-danger mr-2 p-0'>
-                    <Link className='nav-link text-white' href='/register'>
+                    <Link className='nav-link text-white' to='/signup'>
                       <i className='fas fa-user-plus'></i> SIGN UP
                     </Link>
                   </button>
                 </li>
-                {/* <li className='nav-item d-none d-sm-block'>
-              <a className='nav-link' href='#'>
-                |
-              </a>
-            </li> */}
                 <li className='nav-item'>
                   <button type='button' className='btn btn-outline-light p-0'>
                     <Link className='nav-link text-dark' to='/bootcamps'>

@@ -3,11 +3,8 @@ import { Link } from 'react-router-dom';
 import { FaCaretUp } from 'react-icons/fa';
 
 export default function Bootcamp(props) {
-  const { id, address, careers } = props.bootcamp;
-  const name = props.bootcamp.name
-    .split(' ')
-    .join('-')
-    .toLowerCase();
+  const { id, name, address, careers } = props.bootcamp;
+
   return (
     <div className='col-md'>
       <div className='card mb-3'>
@@ -20,7 +17,10 @@ export default function Bootcamp(props) {
               <h5 className='card-title'>
                 <Link
                   to={{
-                    pathname: `/bootcamps/${name}`,
+                    pathname: `/bootcamps/${name
+                      .split(' ')
+                      .join('-')
+                      .toLowerCase()}`,
                     state: {
                       id: id
                     }

@@ -3,6 +3,7 @@ import BootcampCard from '../BootcampCard/BootcampCard';
 import CourseCard from '../CourseCard/CourseCard';
 
 export default function Bootcamps(props) {
+  console.log(props);
   return (
     <div className='container-fluid'>
       <div className='row'>

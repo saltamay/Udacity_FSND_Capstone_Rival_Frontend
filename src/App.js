@@ -193,9 +193,14 @@ function App() {
           <Bootcamps bootcamps={bootcamps} courses={courses} />
         </Route>
         <Route path='/bootcamps/:name' component={Bootcamp} />
-        {/* <Route path='/bootcamps'>
-          <Bootcamp />
-        </Route> */}
+        <Route
+          path='/signup'
+          render={() => {
+            window.location.href =
+              'https://rivalapp.auth0.com/authorize?audience=rival&response_type=token&client_id=M9WAclI1q9Xx9PCQ7oIEqWF8s8087Fjl&redirect_uri=http://localhost:3000';
+            return null;
+          }}
+        />
       </div>
     </Router>
   );
