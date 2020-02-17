@@ -4,8 +4,7 @@ import { FaCaretUp } from 'react-icons/fa';
 import { useAuth0 } from '../../react-auth0-spa';
 
 export default function Course(props) {
-  const { id, title } = props.course;
-  const { getTokenSilently } = useAuth0();
+  const { title } = props.course;
 
   return (
     <div className='col-md'>

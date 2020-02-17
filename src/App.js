@@ -190,21 +190,23 @@ function App() {
 
   const [role, setRole] = useState('user');
 
-  const { loading, user, getTokenSilently } = useAuth0();
+  const { loading, getTokenSilently } = useAuth0();
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   getTokenSilently().then(token => {
-    console.log(jwt_decode(token));
-    if (
-      jwt_decode(token).permissions.some(permmission =>
-        permmission.includes('add')
-      )
-    ) {
-      setRole('admin');
-      console.log(role);
+    if (token) {
+      console.log(jwt_decode(token));
+      if (
+        jwt_decode(token).permissions.some(permmission =>
+          permmission.includes('add:courses')
+        )
+      ) {
+        setRole('admin');
+        console.log(role);
+      }
     }
   });
 
@@ -226,7 +228,7 @@ function App() {
   return (
     <Router>
       <div className='App'>
-        <Navbar />
+        <Navbar role={role} />
         <button className='btn btn-dander' onClick={deleteCourse}>
           DELETE
         </button>

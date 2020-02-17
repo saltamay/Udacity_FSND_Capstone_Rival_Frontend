@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from '../../react-auth0-spa';
 
-export default function Navbar() {
+export default function Navbar({ role }) {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   return (
@@ -30,16 +30,32 @@ export default function Navbar() {
               id='navbarSupportedContent'
             >
               <ul className='navbar-nav ml-auto'>
-                {!isAuthenticated && (
-                  <li className='nav-item'>
-                    <button
-                      type='button'
-                      className='btn btn-outline-secondary mr-2 p-0'
+                {role === 'admin' && (
+                  <li class='nav-item dropdown mr-2'>
+                    <Link
+                      class='nav-link dropdown-toggle'
+                      href='#'
+                      id='navbarDropdown'
+                      role='button'
+                      data-toggle='dropdown'
                     >
-                      <Link className='nav-link text-dark' to='/login'>
-                        <i className='fas fa-sign-in-alt'></i> SIGN UP
+                      <i class='fas fa-user'></i> Account
+                    </Link>
+                    <div class='dropdown-menu'>
+                      <Link class='dropdown-item' href='manage-bootcamp.html'>
+                        Add Bootcamp
                       </Link>
-                    </button>
+                      <Link class='dropdown-item' href='manage-reviews.html'>
+                        Add Course
+                      </Link>
+                      {/* <Link class='dropdown-item' href='manage-account.html'>
+                        Manage Account
+                      </Link>
+                      <div class='dropdown-divider'></div>
+                      <Link class='dropdown-item' href='login.html'>
+                        <i class='fas fa-sign-out-alt'></i> Logout
+                      </Link> */}
+                    </div>
                   </li>
                 )}
                 {!isAuthenticated && (
@@ -52,10 +68,17 @@ export default function Navbar() {
                       {/* <Link className='nav-link text-white' to='/signup'>
                         <i className='fas fa-user-plus'></i> SIGN UP
                       </Link> */}
-                      LOG IN
+                      SIGN IN
                     </button>
                   </li>
                 )}
+                <li className='nav-item mr-2'>
+                  <button type='button' className='btn p-0'>
+                    <Link className='nav-link text-dark' to='/login'>
+                      <i className='fas fa-sign-in-alt'></i> Browse Courses
+                    </Link>
+                  </button>
+                </li>
                 {isAuthenticated && (
                   <li className='nav-item'>
                     <button
