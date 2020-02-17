@@ -8,6 +8,7 @@ import Bootcamps from './components/Bootcamps/Bootcamps';
 import Bootcamp from './pages/Bootcamp/Bootcamp';
 import { useAuth0 } from './react-auth0-spa';
 import BootcampForm from './components/BootcampForm/BootcampForm';
+import CourseForm from './components/CourseForm/CourseForm';
 
 function App() {
   const bootcampData = [
@@ -238,14 +239,15 @@ function App() {
         </Route>
         <Route path='/add-bootcamp' component={BootcampForm} />
         <Route path='/bootcamps/:name' component={Bootcamp} />
-        <Route
+        <Route path='/add-course' component={CourseForm} />
+        {/* <Route
           path='/signup'
           render={() => {
             window.location.href =
               'https://rivalapp.auth0.com/authorize?audience=rival&response_type=token&client_id=M9WAclI1q9Xx9PCQ7oIEqWF8s8087Fjl&redirect_uri=http://localhost:3000';
             return null;
           }}
-        />
+        /> */}
       </div>
     </Router>
   );
