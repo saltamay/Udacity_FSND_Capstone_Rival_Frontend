@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCaretUp } from 'react-icons/fa';
+import { useAuth0 } from '../../react-auth0-spa';
 
 export default function Course(props) {
-  const { title } = props.course;
+  const { id, title } = props.course;
+  const { getTokenSilently } = useAuth0();
+
   return (
     <div className='col-md'>
       <div className='card mb-3'>

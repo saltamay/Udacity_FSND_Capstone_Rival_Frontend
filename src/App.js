@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import * as jwt_decode from 'jwt-decode';
 
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
 import Bootcamps from './components/Bootcamps/Bootcamps';
 import Bootcamp from './pages/Bootcamp/Bootcamp';
+import { useAuth0 } from './react-auth0-spa';
 
 function App() {
   const bootcampData = [
@@ -159,6 +161,7 @@ function App() {
       scholarships_available: false
     }
   ];
+
   const [bootcamps, setBootcamps] = useState([]);
   useEffect(() => {
     fetch('http://localhost:5000/api/v1/bootcamps', {
@@ -185,10 +188,48 @@ function App() {
       .catch(err => console.log(err));
   }, []);
 
+  const [role, setRole] = useState('user');
+
+  const { loading, user, getTokenSilently } = useAuth0();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  getTokenSilently().then(token => {
+    console.log(jwt_decode(token));
+    if (
+      jwt_decode(token).permissions.some(permmission =>
+        permmission.includes('add')
+      )
+    ) {
+      setRole('admin');
+      console.log(role);
+    }
+  });
+
+  const deleteCourse = () => {
+    getTokenSilently().then(token =>
+      fetch(`http://127.0.0.1:5000/api/v1/courses/1`, {
+        method: 'DELETE',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then(res => res.json())
+        .then(res => console.log(res))
+    );
+  };
+
   return (
     <Router>
       <div className='App'>
         <Navbar />
+        <button className='btn btn-dander' onClick={deleteCourse}>
+          DELETE
+        </button>
         <Route exact path='/'>
           <Bootcamps bootcamps={bootcamps} courses={courses} />
         </Route>
