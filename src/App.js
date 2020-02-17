@@ -7,6 +7,7 @@ import Navbar from './components/Navbar/Navbar';
 import Bootcamps from './components/Bootcamps/Bootcamps';
 import Bootcamp from './pages/Bootcamp/Bootcamp';
 import { useAuth0 } from './react-auth0-spa';
+import BootcampForm from './components/BootcampForm/BootcampForm';
 
 function App() {
   const bootcampData = [
@@ -229,12 +230,13 @@ function App() {
     <Router>
       <div className='App'>
         <Navbar role={role} />
-        <button className='btn btn-dander' onClick={deleteCourse}>
+        {/* <button className='btn btn-dander' onClick={deleteCourse}>
           DELETE
-        </button>
+        </button> */}
         <Route exact path='/'>
           <Bootcamps bootcamps={bootcamps} courses={courses} />
         </Route>
+        <Route path='/add-bootcamp' component={BootcampForm} />
         <Route path='/bootcamps/:name' component={Bootcamp} />
         <Route
           path='/signup'

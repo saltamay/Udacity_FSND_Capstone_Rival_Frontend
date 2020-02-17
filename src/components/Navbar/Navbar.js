@@ -31,29 +31,29 @@ export default function Navbar({ role }) {
             >
               <ul className='navbar-nav ml-auto'>
                 {role === 'admin' && (
-                  <li class='nav-item dropdown mr-2'>
+                  <li className='nav-item dropdown mr-2'>
                     <Link
-                      class='nav-link dropdown-toggle'
-                      href='#'
+                      className='nav-link dropdown-toggle'
+                      to='#'
                       id='navbarDropdown'
                       role='button'
                       data-toggle='dropdown'
                     >
-                      <i class='fas fa-user'></i> Account
+                      <i className='fas fa-user'></i> Account
                     </Link>
-                    <div class='dropdown-menu'>
-                      <Link class='dropdown-item' href='manage-bootcamp.html'>
+                    <div className='dropdown-menu'>
+                      <Link className='dropdown-item' to='/add-bootcamp'>
                         Add Bootcamp
                       </Link>
-                      <Link class='dropdown-item' href='manage-reviews.html'>
+                      <Link className='dropdown-item' to='/add-course'>
                         Add Course
                       </Link>
-                      {/* <Link class='dropdown-item' href='manage-account.html'>
+                      {/* <Link className='dropdown-item' href='manage-account.html'>
                         Manage Account
                       </Link>
-                      <div class='dropdown-divider'></div>
-                      <Link class='dropdown-item' href='login.html'>
-                        <i class='fas fa-sign-out-alt'></i> Logout
+                      <div className='dropdown-divider'></div>
+                      <Link className='dropdown-item' href='login.html'>
+                        <i className='fas fa-sign-out-alt'></i> Logout
                       </Link> */}
                     </div>
                   </li>
