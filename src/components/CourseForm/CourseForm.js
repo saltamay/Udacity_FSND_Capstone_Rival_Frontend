@@ -69,7 +69,6 @@ export default function CourseForm(props) {
     };
 
     if (props.location.state.course) {
-      console.log(data);
       fetch(
         `http://localhost:5000/api/v1/courses/${props.location.state.course.id}`,
         {

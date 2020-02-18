@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaCaretUp } from 'react-icons/fa';
 
 export default function Bootcamp(props) {
-  const { id, name, address, careers } = props.bootcamp;
+  const { name, address, careers } = props.bootcamp;
 
   return (
     <div className='col-md'>
@@ -22,7 +22,7 @@ export default function Bootcamp(props) {
                       .join('-')
                       .toLowerCase()}`,
                     state: {
-                      id: id
+                      bootcamp: props.bootcamp
                     }
                   }}
                   className='text-dark font-weight-bold'

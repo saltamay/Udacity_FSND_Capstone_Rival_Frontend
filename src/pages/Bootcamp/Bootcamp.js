@@ -3,21 +3,19 @@ import { Link } from 'react-router-dom';
 import CourseDetails from '../../components/CourseDetails/CourseDetails';
 
 export default function Bootcamp(props) {
-  const { id } = props.location.state;
   const { role, token } = props;
-
-  const [bootcamp, setBootcamp] = useState({});
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/v1/bootcamps/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(res => setBootcamp(res.data))
-      .catch(err => console.log(err));
-  }, [id]);
+  const [bootcamp, setBootcamp] = useState(props.location.state.bootcamp);
+  // useEffect(() => {
+  //   fetch(`http://localhost:5000/api/v1/bootcamps/${id}`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   })
+  //     .then(res => res.json())
+  //     .then(res => setBootcamp(res.data))
+  //     .catch(err => console.log(err));
+  // }, [id]);
 
   const [courses, setCourses] = useState([]);
   useEffect(() => {
@@ -62,7 +60,18 @@ export default function Bootcamp(props) {
           </h1>
           {role === 'admin' && (
             <React.Fragment>
-              <Link to='#' className='btn btn-info btn-block my-3'>
+              <Link
+                to={{
+                  pathname: `/edit-bootcamp/${bootcamp.name
+                    .split(' ')
+                    .join('-')
+                    .toLowerCase()}`,
+                  state: {
+                    bootcamp: bootcamp
+                  }
+                }}
+                className='btn btn-info btn-block my-3'
+              >
                 Edit Bootcamp
               </Link>
               <Link to='#' className='btn btn-danger btn-block my-3'>

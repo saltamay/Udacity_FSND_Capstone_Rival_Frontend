@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 
-export default function BootcampForm({ token, handleBootcampSubmit }) {
-  const [name, setName] = useState();
-  const [address, setAddress] = useState();
-  const [phone, setPhone] = useState();
-  const [email, setEmail] = useState();
-  const [website, setWebsite] = useState();
-  const [description, setDescription] = useState();
-  const [careers, setCareers] = useState();
-  const [jobAssistance, setJobAssistance] = useState();
+export default function BootcampForm(props) {
+  const bootcamp = props.location ? props.location.state.bootcamp : null;
+
+  const [name, setName] = useState(bootcamp ? bootcamp.name : '');
+  const [address, setAddress] = useState(bootcamp ? bootcamp.address : '');
+  const [phone, setPhone] = useState(bootcamp ? bootcamp.phone : '');
+  const [email, setEmail] = useState(bootcamp ? bootcamp.email : '');
+  const [website, setWebsite] = useState(bootcamp ? bootcamp.website : '');
+  const [description, setDescription] = useState(
+    bootcamp ? bootcamp.description : ''
+  );
+  const [careers, setCareers] = useState(bootcamp ? bootcamp.careers : []);
+  const [jobAssistance, setJobAssistance] = useState(
+    bootcamp ? bootcamp['job_assistance'] : false
+  );
 
   const handleChange = e => {
     const query = e.target.value;
@@ -59,21 +65,38 @@ export default function BootcampForm({ token, handleBootcampSubmit }) {
       careers,
       jobAssistance
     };
-
-    fetch('http://localhost:5000/api/v1/bootcamps', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (res.success) {
-          handleBootcampSubmit(res.data);
-        }
-      });
+    console.log(data);
+    if (bootcamp) {
+      fetch(`http://localhost:5000/api/v1/bootcamps/${bootcamp.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${props.token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            props.handleBootcampUpdate(res.data);
+          }
+        });
+    } else {
+      fetch('http://localhost:5000/api/v1/bootcamps', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${props.token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            props.handleBootcampSubmit(res.data);
+          }
+        });
+    }
   };
 
   return (
@@ -176,6 +199,7 @@ export default function BootcampForm({ token, handleBootcampSubmit }) {
                     name='careers'
                     className='custom-select'
                     multiple
+                    defaultValue={careers}
                     onChange={e => handleOptionsChange(e)}
                   >
                     <option defaultValue>Select all that apply</option>
@@ -195,6 +219,7 @@ export default function BootcampForm({ token, handleBootcampSubmit }) {
                     type='checkbox'
                     name='jobAssistance'
                     id='jobAssistance'
+                    checked={jobAssistance}
                     onChange={e => handleChange(e)}
                   />
                   <label className='form-check-label' htmlFor='jobAssistance'>
@@ -210,11 +235,19 @@ export default function BootcampForm({ token, handleBootcampSubmit }) {
           </div>
         </div>
         <div className='form-group'>
-          <input
-            type='submit'
-            value='Submit Bootcamp'
-            className='btn btn-danger my-4'
-          />
+          {bootcamp ? (
+            <input
+              type='submit'
+              value='Update Bootcamp'
+              className='btn btn-danger my-4'
+            />
+          ) : (
+            <input
+              type='submit'
+              value='Submit Bootcamp'
+              className='btn btn-danger my-4'
+            />
+          )}
         </div>
       </form>
     </div>

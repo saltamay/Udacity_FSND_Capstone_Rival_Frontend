@@ -220,12 +220,34 @@ function App() {
     setBootcamps(updatedBootcampsList);
   };
 
+  const handleBootcampUpdate = updatedBootcamp => {
+    const updatedBootcampsList = [];
+    bootcamps.forEach(bootcamp => {
+      if (bootcamp.id === updatedBootcamp.id) {
+        updatedBootcampsList.push(updatedBootcamp);
+      } else {
+        updatedBootcampsList.push(bootcamp);
+      }
+    });
+    setBootcamps(updatedBootcampsList);
+  };
+
   const handleCourseSubmit = course => {
     const updatedCoursesList = [...courses, course];
     setCourses(updatedCoursesList);
   };
 
-  const handleCourseUpdate = course => {};
+  const handleCourseUpdate = updatedCourse => {
+    const updatedCoursesList = [];
+    courses.forEach(course => {
+      if (course.id === updatedCourse.id) {
+        updatedCoursesList.push(updatedCourse);
+      } else {
+        updatedCoursesList.push(course);
+      }
+    });
+    setCourses(updatedCoursesList);
+  };
 
   const handleCourseDelete = id => {
     const updatedCoursesList = courses.filter(course => course.id != id);
@@ -248,6 +270,16 @@ function App() {
             handleBootcampSubmit={handleBootcampSubmit}
           />
         </Route>
+        <Route
+          path='/edit-bootcamp/:title'
+          render={props => (
+            <BootcampForm
+              token={token}
+              handleBootcampUpdate={handleBootcampUpdate}
+              {...props}
+            />
+          )}
+        />
         <Route
           path='/bootcamps/:name'
           render={props => <Bootcamp role={role} token={token} {...props} />}
