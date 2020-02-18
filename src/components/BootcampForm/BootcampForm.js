@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function BootcampForm() {
+export default function BootcampForm({ token, handleBootcampSubmit }) {
   const [name, setName] = useState();
   const [address, setAddress] = useState();
   const [phone, setPhone] = useState();
@@ -29,8 +29,11 @@ export default function BootcampForm() {
       case 'website':
         setWebsite(query);
         break;
-      default:
+      case 'description':
         setDescription(query);
+        break;
+      default:
+        e.target.checked ? setJobAssistance(true) : setJobAssistance(false);
         break;
     }
   };
@@ -44,12 +47,33 @@ export default function BootcampForm() {
     setCareers(value);
   };
 
-  const handleCheckChange = e => {
-    e.target.checked ? setJobAssistance(true) : setJobAssistance(false);
-  };
-
   const handleFormSubmit = e => {
     e.preventDefault();
+    const data = {
+      name,
+      description,
+      website,
+      phone,
+      email,
+      address,
+      careers,
+      jobAssistance
+    };
+
+    fetch('http://localhost:5000/api/v1/bootcamps', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          handleBootcampSubmit(res.data);
+        }
+      });
   };
 
   return (
@@ -171,7 +195,7 @@ export default function BootcampForm() {
                     type='checkbox'
                     name='jobAssistance'
                     id='jobAssistance'
-                    onChange={e => handleCheckChange(e)}
+                    onChange={e => handleChange(e)}
                   />
                   <label className='form-check-label' htmlFor='jobAssistance'>
                     Job Assistance

@@ -234,6 +234,11 @@ function App() {
     setCourses(updatedCoursesList);
   };
 
+  const handleBootcampSubmit = bootcamp => {
+    const updatedBootcampsList = [...bootcamps, bootcamp];
+    setBootcamps(updatedBootcampsList);
+  };
+
   return (
     <Router>
       <div className='App'>
@@ -244,7 +249,12 @@ function App() {
         <Route exact path='/'>
           <Bootcamps bootcamps={bootcamps} courses={courses} />
         </Route>
-        <Route path='/add-bootcamp' token={token} component={BootcampForm} />
+        <Route path='/add-bootcamp'>
+          <BootcampForm
+            token={token}
+            handleBootcampSubmit={handleBootcampSubmit}
+          />
+        </Route>
         <Route path='/bootcamps/:name' component={Bootcamp} />
         <Route path='/add-course'>
           <CourseForm token={token} handleCourseSubmit={handleCourseSubmit} />
