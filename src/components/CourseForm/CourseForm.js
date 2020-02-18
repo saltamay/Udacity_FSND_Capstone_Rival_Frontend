@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-export default function CourseForm() {
+export default function CourseForm({ token, handleCourseSubmit }) {
   const [title, setTitle] = useState();
   const [duration, setDuration] = useState();
   const [tuition, setTuition] = useState();
   const [description, setDescription] = useState();
   const [minimumSkill, setMinimumSkill] = useState('beginner');
-  const [scholarshipAvailable, setScholarshipAvailable] = useState(false);
+  const [scholarshipsAvailable, setScholarshipAvailable] = useState(false);
 
   const handleChange = e => {
     const query = e.target.value;
@@ -27,6 +27,7 @@ export default function CourseForm() {
         break;
       case 'minimumSkill':
         setMinimumSkill(query);
+        break;
       default:
         e.target.checked
           ? setScholarshipAvailable(true)
@@ -37,57 +38,82 @@ export default function CourseForm() {
 
   const handleFormSubmit = e => {
     e.preventDefault();
+    const data = {
+      title,
+      duration: parseInt(duration),
+      tuition: parseInt(tuition),
+      description,
+      minimumSkill,
+      scholarshipsAvailable
+    };
+
+    fetch('http://localhost:5000/api/v1/courses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          handleCourseSubmit(res.data);
+        }
+      });
   };
+
   return (
     <div className='container-fluid'>
       {/* <h1 class='mb-2'>DevWorks Bootcamp</h1> */}
-      <h3 class='text-primary mb-4'>Add Course</h3>
+      <h3 className='text-primary mb-4'>Add Course</h3>
       <form
         className='col-md-8 offset-md-2'
         onSubmit={e => handleFormSubmit(e)}
       >
-        <div class='form-group'>
+        <div className='form-group'>
           <label>Course Title</label>
           <input
             type='text'
             name='title'
-            class='form-control'
+            className='form-control'
             placeholder='Title'
             value={title}
             onChange={e => handleChange(e)}
           />
         </div>
-        <div class='form-group'>
+        <div className='form-group'>
           <label>Duration</label>
           <input
             type='number'
             name='duration'
             placeholder='Duration'
-            class='form-control'
+            className='form-control'
             value={duration}
             onChange={e => handleChange(e)}
           />
-          <small class='form-text text-muted'>
+          <small className='form-text text-muted'>
             Enter number of weeks course lasts
           </small>
         </div>
-        <div class='form-group'>
+        <div className='form-group'>
           <label>Course Tuition</label>
           <input
             type='number'
             name='tuition'
             placeholder='Tuition'
-            class='form-control'
+            className='form-control'
             value={tuition}
             onChange={e => handleChange(e)}
           />
-          <small class='form-text text-muted'>USD Currency</small>
+          <small className='form-text text-muted'>USD Currency</small>
         </div>
-        <div class='form-group'>
+        <div className='form-group'>
           <label>Minimum Skill Required</label>
           <select
             name='minimumSkill'
-            class='form-control'
+            className='form-control'
+            value={minimumSkill}
             onChange={e => handleChange(e)}
           >
             <option value='beginner' defaultValue>
@@ -97,34 +123,34 @@ export default function CourseForm() {
             <option value='advanced'>Advanced</option>
           </select>
         </div>
-        <div class='form-group'>
+        <div className='form-group'>
           <textarea
             name='description'
             rows='5'
-            class='form-control'
+            className='form-control'
             placeholder='Course description summary'
             maxLength='500'
             value={description}
             onChange={e => handleChange(e)}
           ></textarea>
-          <small class='form-text text-muted'>
+          <small className='form-text text-muted'>
             No more than 500 characters
           </small>
         </div>
-        <div class='form-check'>
+        <div className='form-check'>
           <input
-            class='form-check-input'
+            className='form-check-input'
             type='checkbox'
             name='scholarshipAvailable'
             id='scholarshipAvailable'
             onChange={e => handleChange(e)}
           />
-          <label class='form-check-label' htmlFor='scholarshipAvailable'>
+          <label className='form-check-label' htmlFor='scholarshipAvailable'>
             Scholarship Available
           </label>
         </div>
-        <div class='form-group mt-4'>
-          <input type='submit' value='Add Course' class='btn btn-dark' />
+        <div className='form-group mt-4'>
+          <input type='submit' value='Add Course' className='btn btn-dark' />
         </div>
       </form>
     </div>

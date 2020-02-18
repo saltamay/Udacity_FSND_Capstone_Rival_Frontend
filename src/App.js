@@ -191,6 +191,7 @@ function App() {
   }, []);
 
   const [role, setRole] = useState('user');
+  const [token, setToken] = useState();
 
   const { loading, getTokenSilently } = useAuth0();
 
@@ -207,6 +208,7 @@ function App() {
         )
       ) {
         setRole('admin');
+        setToken(token);
         console.log(role);
       }
     }
@@ -227,6 +229,11 @@ function App() {
     );
   };
 
+  const handleCourseSubmit = course => {
+    const updatedCoursesList = [...courses, course];
+    setCourses(updatedCoursesList);
+  };
+
   return (
     <Router>
       <div className='App'>
@@ -237,9 +244,11 @@ function App() {
         <Route exact path='/'>
           <Bootcamps bootcamps={bootcamps} courses={courses} />
         </Route>
-        <Route path='/add-bootcamp' component={BootcampForm} />
+        <Route path='/add-bootcamp' token={token} component={BootcampForm} />
         <Route path='/bootcamps/:name' component={Bootcamp} />
-        <Route path='/add-course' component={CourseForm} />
+        <Route path='/add-course'>
+          <CourseForm token={token} handleCourseSubmit={handleCourseSubmit} />
+        </Route>
         {/* <Route
           path='/signup'
           render={() => {
