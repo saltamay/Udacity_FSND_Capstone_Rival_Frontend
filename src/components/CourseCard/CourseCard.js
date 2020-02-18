@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaCaretUp } from 'react-icons/fa';
 
 export default function CourseCard(props) {
-  const { id, title } = props.course;
-  console.log(props.course);
+  // const { id, title } = props.course;
   return (
     <div className='col-md'>
       <div className='card mb-3'>
@@ -14,17 +13,17 @@ export default function CourseCard(props) {
               <h5 className='card-title'>
                 <Link
                   to={{
-                    pathname: `/courses/${title
+                    pathname: `/courses/${props.course.title
                       .split(' ')
                       .join('-')
                       .toLowerCase()}`,
                     state: {
-                      id: id
+                      course: props.course
                     }
                   }}
                   className='text-dark font-weight-bold'
                 >
-                  {title}
+                  {props.course.title}
                 </Link>
               </h5>
               {/* <span className='badge badge-danger mb-2'>{address}</span>

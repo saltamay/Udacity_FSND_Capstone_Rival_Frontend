@@ -215,15 +215,17 @@ function App() {
     }
   });
 
+  const handleBootcampSubmit = bootcamp => {
+    const updatedBootcampsList = [...bootcamps, bootcamp];
+    setBootcamps(updatedBootcampsList);
+  };
+
   const handleCourseSubmit = course => {
     const updatedCoursesList = [...courses, course];
     setCourses(updatedCoursesList);
   };
 
-  const handleBootcampSubmit = bootcamp => {
-    const updatedBootcampsList = [...bootcamps, bootcamp];
-    setBootcamps(updatedBootcampsList);
-  };
+  const handleCourseUpdate = course => {};
 
   const handleCourseDelete = id => {
     const updatedCoursesList = courses.filter(course => course.id != id);
@@ -264,6 +266,17 @@ function App() {
         <Route path='/add-course'>
           <CourseForm token={token} handleCourseSubmit={handleCourseSubmit} />
         </Route>
+        <Route
+          path='/edit-course/:title'
+          render={props => (
+            <CourseForm
+              token={token}
+              handleCourseUpdate={handleCourseUpdate}
+              {...props}
+            />
+          )}
+        />
+
         {/* <Route
           path='/signup'
           render={() => {

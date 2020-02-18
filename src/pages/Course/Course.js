@@ -2,25 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 export default function Course(props) {
-  const { id } = props.location.state;
+  const { course } = props.location.state;
   const { role, token, handleCourseDelete } = props;
   const history = useHistory();
   const handleRouteChange = () => {
     history.push('/');
   };
 
-  const [course, setCourse] = useState({});
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/v1/courses/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(res => setCourse(res.data))
-      .catch(err => console.log(err));
-  }, [id]);
+  // const [course, setCourse] = useState({});
+  // useEffect(() => {
+  //   fetch(`http://localhost:5000/api/v1/courses/${id}`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   })
+  //     .then(res => res.json())
+  //     .then(res => setCourse(res.data))
+  //     .catch(err => console.log(err));
+  // }, [id]);
 
   // const [courses, setCourses] = useState([]);
   // useEffect(() => {
@@ -37,7 +37,7 @@ export default function Course(props) {
   // }, []);
 
   const handleDelete = () => {
-    fetch(`http://localhost:5000/api/v1/courses/${id}`, {
+    fetch(`http://localhost:5000/api/v1/courses/${course.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export default function Course(props) {
       .then(res => res.json())
       .then(res => {
         if (res.success) {
-          handleCourseDelete(id);
+          handleCourseDelete(course.id);
           handleRouteChange();
         }
       })
@@ -88,7 +88,18 @@ export default function Course(props) {
           </h1>
           {role === 'admin' && (
             <React.Fragment>
-              <Link to='#' className='btn btn-info btn-block my-3'>
+              <Link
+                to={{
+                  pathname: `/edit-course/${course.title
+                    .split(' ')
+                    .join('-')
+                    .toLowerCase()}`,
+                  state: {
+                    course: course
+                  }
+                }}
+                className='btn btn-info btn-block my-3'
+              >
                 Edit Course
               </Link>
               <button

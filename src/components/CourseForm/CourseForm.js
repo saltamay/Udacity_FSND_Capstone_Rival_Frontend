@@ -1,12 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default function CourseForm({ token, handleCourseSubmit }) {
+export default function CourseForm(props) {
   const [title, setTitle] = useState();
   const [duration, setDuration] = useState();
   const [tuition, setTuition] = useState();
   const [description, setDescription] = useState();
   const [minimumSkill, setMinimumSkill] = useState('beginner');
   const [scholarshipsAvailable, setScholarshipAvailable] = useState(false);
+
+  const { token } = props;
+
+  useEffect(() => {
+    if (props.location.state.course) {
+      const {
+        title,
+        duration,
+        tuition,
+        description,
+        minimum_skill,
+        scholarships_available
+      } = props.location.state.course;
+      setTitle(title);
+      setDuration(duration);
+      setTuition(tuition);
+      setDescription(description);
+      setMinimumSkill(minimum_skill);
+      setScholarshipAvailable(scholarships_available);
+    }
+  }, []);
 
   const handleChange = e => {
     const query = e.target.value;
@@ -47,20 +68,41 @@ export default function CourseForm({ token, handleCourseSubmit }) {
       scholarshipsAvailable
     };
 
-    fetch('http://localhost:5000/api/v1/courses', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (res.success) {
-          handleCourseSubmit(res.data);
+    if (props.location.state.course) {
+      console.log(data);
+      fetch(
+        `http://localhost:5000/api/v1/courses/${props.location.state.course.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(data)
         }
-      });
+      )
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            props.handleCourseUpdate(res.data);
+          }
+        });
+    } else {
+      fetch('http://localhost:5000/api/v1/courses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            props.handleCourseSubmit(res.data);
+          }
+        });
+    }
   };
 
   return (
@@ -113,12 +155,10 @@ export default function CourseForm({ token, handleCourseSubmit }) {
           <select
             name='minimumSkill'
             className='form-control'
-            value={minimumSkill}
+            defaultValue={minimumSkill}
             onChange={e => handleChange(e)}
           >
-            <option value='beginner' defaultValue>
-              Beginner (Any)
-            </option>
+            <option value='beginner'>Beginner (Any)</option>
             <option value='intermediate'>Intermediate</option>
             <option value='advanced'>Advanced</option>
           </select>
@@ -142,6 +182,7 @@ export default function CourseForm({ token, handleCourseSubmit }) {
             className='form-check-input'
             type='checkbox'
             name='scholarshipAvailable'
+            checked={scholarshipsAvailable}
             id='scholarshipAvailable'
             onChange={e => handleChange(e)}
           />
@@ -150,7 +191,15 @@ export default function CourseForm({ token, handleCourseSubmit }) {
           </label>
         </div>
         <div className='form-group mt-4'>
-          <input type='submit' value='Add Course' className='btn btn-dark' />
+          {props.location.state.course ? (
+            <input
+              type='submit'
+              value='Update Course'
+              className='btn btn-dark'
+            />
+          ) : (
+            <input type='submit' value='Add Course' className='btn btn-dark' />
+          )}
         </div>
       </form>
     </div>
