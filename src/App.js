@@ -215,21 +215,6 @@ function App() {
     }
   });
 
-  const deleteCourse = () => {
-    getTokenSilently().then(token =>
-      fetch(`http://127.0.0.1:5000/api/v1/courses/1`, {
-        method: 'DELETE',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      })
-        .then(res => res.json())
-        .then(res => console.log(res))
-    );
-  };
-
   const handleCourseSubmit = course => {
     const updatedCoursesList = [...courses, course];
     setCourses(updatedCoursesList);
@@ -238,6 +223,11 @@ function App() {
   const handleBootcampSubmit = bootcamp => {
     const updatedBootcampsList = [...bootcamps, bootcamp];
     setBootcamps(updatedBootcampsList);
+  };
+
+  const handleCourseDelete = id => {
+    const updatedCoursesList = courses.filter(course => course.id != id);
+    setCourses(updatedCoursesList);
   };
 
   return (
@@ -262,7 +252,14 @@ function App() {
         />
         <Route
           path='/courses/:title'
-          render={props => <Course role={role} token={token} {...props} />}
+          render={props => (
+            <Course
+              role={role}
+              token={token}
+              handleCourseDelete={handleCourseDelete}
+              {...props}
+            />
+          )}
         />
         <Route path='/add-course'>
           <CourseForm token={token} handleCourseSubmit={handleCourseSubmit} />

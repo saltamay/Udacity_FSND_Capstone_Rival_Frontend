@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function Course(props) {
   const { id } = props.location.state;
-  const { role, token } = props;
+  const { role, token, handleCourseDelete } = props;
+  const history = useHistory();
+  const handleRouteChange = () => {
+    history.push('/');
+  };
 
   const [course, setCourse] = useState({});
   useEffect(() => {
@@ -31,6 +35,24 @@ export default function Course(props) {
   //     .then(res => setCourses(res.data))
   //     .catch(err => console.log(err));
   // }, []);
+
+  const handleDelete = () => {
+    fetch(`http://localhost:5000/api/v1/courses/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          handleCourseDelete(id);
+          handleRouteChange();
+        }
+      })
+      .catch(err => console.log(err));
+  };
 
   return (
     <div className='container'>
@@ -69,9 +91,12 @@ export default function Course(props) {
               <Link to='#' className='btn btn-info btn-block my-3'>
                 Edit Course
               </Link>
-              <Link to='#' className='btn btn-danger btn-block my-3'>
+              <button
+                className='btn btn-danger btn-block my-3'
+                onClick={handleDelete}
+              >
                 Delete Course
-              </Link>
+              </button>
             </React.Fragment>
           )}
           {role === 'user' && (
