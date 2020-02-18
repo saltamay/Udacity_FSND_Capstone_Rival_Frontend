@@ -255,7 +255,10 @@ function App() {
             handleBootcampSubmit={handleBootcampSubmit}
           />
         </Route>
-        <Route path='/bootcamps/:name' component={Bootcamp} />
+        <Route
+          path='/bootcamps/:name'
+          render={props => <Bootcamp role={role} token={token} {...props} />}
+        />
         <Route path='/add-course'>
           <CourseForm token={token} handleCourseSubmit={handleCourseSubmit} />
         </Route>

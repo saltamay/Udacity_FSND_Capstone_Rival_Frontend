@@ -8,7 +8,7 @@ export default function CourseDetails(props) {
     minimum_skill,
     scholarships_available
   } = props.course;
-  const tuition = props.course.tuition.toLocaleString();
+  const tuition = props.course.tuition;
   return (
     <div className='card mb-3'>
       <h5 className='card-header bg-danger text-white'>{title}</h5>
