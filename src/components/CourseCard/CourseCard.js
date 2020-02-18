@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCaretUp } from 'react-icons/fa';
 
-export default function Course(props) {
-  const { title } = props.course;
-
+export default function CourseCard(props) {
+  const { id, title } = props.course;
+  console.log(props.course);
   return (
     <div className='col-md'>
       <div className='card mb-3'>
@@ -12,7 +12,18 @@ export default function Course(props) {
           <div className='col-md-9'>
             <div className='card-body'>
               <h5 className='card-title'>
-                <Link to='/bootcamps' className='text-dark font-weight-bold'>
+                <Link
+                  to={{
+                    pathname: `/courses/${title
+                      .split(' ')
+                      .join('-')
+                      .toLowerCase()}`,
+                    state: {
+                      id: id
+                    }
+                  }}
+                  className='text-dark font-weight-bold'
+                >
                   {title}
                 </Link>
               </h5>

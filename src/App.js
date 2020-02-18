@@ -9,6 +9,7 @@ import Bootcamp from './pages/Bootcamp/Bootcamp';
 import { useAuth0 } from './react-auth0-spa';
 import BootcampForm from './components/BootcampForm/BootcampForm';
 import CourseForm from './components/CourseForm/CourseForm';
+import Course from './pages/Course/Course';
 
 function App() {
   const bootcampData = [
@@ -258,6 +259,10 @@ function App() {
         <Route
           path='/bootcamps/:name'
           render={props => <Bootcamp role={role} token={token} {...props} />}
+        />
+        <Route
+          path='/courses/:title'
+          render={props => <Course role={role} token={token} {...props} />}
         />
         <Route path='/add-course'>
           <CourseForm token={token} handleCourseSubmit={handleCourseSubmit} />
