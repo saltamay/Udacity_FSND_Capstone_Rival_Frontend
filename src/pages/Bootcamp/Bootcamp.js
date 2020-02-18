@@ -23,8 +23,7 @@ export default function Bootcamp(props) {
 
   const [courses, setCourses] = useState([]);
   useEffect(() => {
-    // Todo: fetch(`http://localhost:5000/api/v1/bootcamps/${id}/courses`)
-    fetch(`http://localhost:5000/api/v1/courses`, {
+    fetch(`http://localhost:5000/api/v1/bootcamps/${bootcamp.id}/courses`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

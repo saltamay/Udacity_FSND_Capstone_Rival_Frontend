@@ -174,7 +174,11 @@ function App() {
       }
     })
       .then(res => res.json())
-      .then(res => setBootcamps(res.data))
+      .then(res => {
+        if (res.success) {
+          setBootcamps(res.data);
+        }
+      })
       .catch(err => console.log(err));
   }, []);
 
