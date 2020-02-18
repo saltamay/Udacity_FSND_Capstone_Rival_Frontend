@@ -232,6 +232,13 @@ function App() {
     setBootcamps(updatedBootcampsList);
   };
 
+  const handleBootcampDelete = id => {
+    const updatedBootcampsList = bootcamps.filter(
+      bootcamp => bootcamp.id != id
+    );
+    setBootcamps(updatedBootcampsList);
+  };
+
   const handleCourseSubmit = course => {
     const updatedCoursesList = [...courses, course];
     setCourses(updatedCoursesList);
@@ -282,7 +289,14 @@ function App() {
         />
         <Route
           path='/bootcamps/:name'
-          render={props => <Bootcamp role={role} token={token} {...props} />}
+          render={props => (
+            <Bootcamp
+              role={role}
+              token={token}
+              handleBootcampDelete={handleBootcampDelete}
+              {...props}
+            />
+          )}
         />
         <Route
           path='/courses/:title'

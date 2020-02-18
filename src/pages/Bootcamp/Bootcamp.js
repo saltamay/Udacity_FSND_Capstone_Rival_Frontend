@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import CourseDetails from '../../components/CourseDetails/CourseDetails';
 
 export default function Bootcamp(props) {
-  const { role, token } = props;
+  const { role, token, handleBootcampDelete } = props;
   const [bootcamp, setBootcamp] = useState(props.location.state.bootcamp);
+  const history = useHistory();
+  const handleRouteChange = () => {
+    history.push('/');
+  };
   // useEffect(() => {
   //   fetch(`http://localhost:5000/api/v1/bootcamps/${id}`, {
   //     method: 'GET',
@@ -30,6 +34,24 @@ export default function Bootcamp(props) {
       .then(res => setCourses(res.data))
       .catch(err => console.log(err));
   }, []);
+
+  const handleDelete = () => {
+    fetch(`http://localhost:5000/api/v1/bootcamps/${bootcamp.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          handleBootcampDelete(bootcamp.id);
+          handleRouteChange();
+        }
+      })
+      .catch(err => console.log(err));
+  };
 
   return (
     <div className='container'>
@@ -74,9 +96,12 @@ export default function Bootcamp(props) {
               >
                 Edit Bootcamp
               </Link>
-              <Link to='#' className='btn btn-danger btn-block my-3'>
+              <button
+                className='btn btn-danger btn-block my-3'
+                onClick={handleDelete}
+              >
                 Delete Bootcamp
-              </Link>
+              </button>
             </React.Fragment>
           )}
           {role === 'user' && (
