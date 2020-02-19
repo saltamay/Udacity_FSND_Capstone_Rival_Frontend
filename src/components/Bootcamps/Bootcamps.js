@@ -11,7 +11,11 @@ export default function Bootcamps(props) {
           {props.bootcamps
             .sort((a, b) => b.upvotes - a.upvotes)
             .map(bootcamp => (
-              <BootcampCard key={bootcamp.id} bootcamp={bootcamp} />
+              <BootcampCard
+                key={bootcamp.id}
+                bootcamp={bootcamp}
+                role={props.role}
+              />
             ))}
         </div>
         <div className='col-md-4'>
@@ -27,6 +31,7 @@ export default function Bootcamps(props) {
                   key={course.id}
                   course={course}
                   bootcamp={bootcamp[0]}
+                  role={props.role}
                 />
               );
             })}

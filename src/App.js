@@ -206,6 +206,7 @@ function App() {
 
   getTokenSilently().then(token => {
     if (token) {
+      // console.log(token);
       if (
         jwt_decode(token).permissions.some(permmission =>
           permmission.includes('add:courses')
@@ -268,11 +269,8 @@ function App() {
     <Router>
       <div className='App'>
         <Navbar role={role} />
-        {/* <button className='btn btn-dander' onClick={deleteCourse}>
-          DELETE
-        </button> */}
         <Route exact path='/'>
-          <Bootcamps bootcamps={bootcamps} courses={courses} />
+          <Bootcamps role={role} bootcamps={bootcamps} courses={courses} />
         </Route>
         <Route path='/add-bootcamp'>
           <BootcampForm

@@ -6,7 +6,6 @@ import './Bootcamp.css';
 export default function Bootcamp(props) {
   const { role, token, handleBootcampDelete } = props;
   const [bootcamp, setBootcamp] = useState(props.location.state.bootcamp);
-  console.log(bootcamp['img_url']);
   const history = useHistory();
   const handleRouteChange = () => {
     history.push('/');

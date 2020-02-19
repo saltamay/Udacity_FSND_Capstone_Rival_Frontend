@@ -33,13 +33,27 @@ export default function Bootcamp(props) {
             </div>
           </div>
           <div className='col-md-2 d-flex align-items-center justify-content-center'>
-            <button type='button' className='btn btn-light pl-4 pr-4'>
-              <React.Fragment>
-                <FaCaretUp size={24} />
-                <br />
-                {upvotes}
-              </React.Fragment>
-            </button>
+            {props.role === 'admin' ? (
+              <button
+                type='button'
+                className='btn btn-light pl-4 pr-4'
+                disabled
+              >
+                <React.Fragment>
+                  <FaCaretUp size={24} />
+                  <br />
+                  {upvotes}
+                </React.Fragment>
+              </button>
+            ) : (
+              <button type='button' className='btn btn-light pl-4 pr-4'>
+                <React.Fragment>
+                  <FaCaretUp size={24} />
+                  <br />
+                  {upvotes}
+                </React.Fragment>
+              </button>
+            )}
           </div>
         </div>
       </div>
