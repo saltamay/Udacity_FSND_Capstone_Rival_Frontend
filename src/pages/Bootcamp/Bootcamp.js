@@ -101,6 +101,9 @@ export default function Bootcamp(props) {
               >
                 Delete Bootcamp
               </button>
+              <Link to='/add-course' className='btn btn-success btn-block my-3'>
+                Add Course
+              </Link>
             </React.Fragment>
           )}
           {role === 'user' && (

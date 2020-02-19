@@ -44,7 +44,7 @@ function App() {
     {
       name: 'ModernTech Bootcamp',
       description:
-        'ModernTech has one goal, and that is to make you a rockstar developer and/or designer with a six figure salary. We teach both development and UI/UX',
+        'ModernTech has one goal, and that is to make you a rockstar developer and/or designer with a six figure salary. We teach both development and UI/UX.',
       website: 'https://moderntech.com',
       phone: '(222) 222-2222',
       email: 'enroll@moderntech.com',
@@ -112,7 +112,7 @@ function App() {
     {
       title: 'UI/UX',
       description:
-        'In this course you will learn to create beautiful interfaces. It is a mix of design and development to create modern user experiences on both web and mobile',
+        'In this course you will learn to create beautiful interfaces. It is a mix of design and development to create modern user experiences on both web and mobile.',
       duration: 12,
       tuition: 10000,
       minimum_skill: 'intermediate',

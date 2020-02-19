@@ -1,39 +1,54 @@
 import React, { useState, useEffect } from 'react';
 
 export default function CourseForm(props) {
-  const [title, setTitle] = useState();
-  const [duration, setDuration] = useState();
-  const [tuition, setTuition] = useState();
-  const [description, setDescription] = useState();
-  const [minimumSkill, setMinimumSkill] = useState('beginner');
-  const [scholarshipsAvailable, setScholarshipAvailable] = useState(false);
+  console.log(props.location);
+  const course = props.location ? props.location.state.course : null;
+
+  const [title, setTitle] = useState(course ? course.title : '');
+  const [duration, setDuration] = useState(course ? course.duration : null);
+  const [tuition, setTuition] = useState(course ? course.tuition : null);
+  const [description, setDescription] = useState(
+    course ? course.description : ''
+  );
+  const [minimumSkill, setMinimumSkill] = useState(
+    course ? course['minimum_skill'] : 'beginner'
+  );
+  const [scholarshipsAvailable, setScholarshipAvailable] = useState(
+    course ? course['scholarships_available'] : false
+  );
+  const [bootcampId, setBootcampId] = useState(
+    course ? course['bootcamp_id'] : null
+  );
 
   const { token } = props;
 
-  useEffect(() => {
-    if (props.location.state.course) {
-      const {
-        title,
-        duration,
-        tuition,
-        description,
-        minimum_skill,
-        scholarships_available
-      } = props.location.state.course;
-      setTitle(title);
-      setDuration(duration);
-      setTuition(tuition);
-      setDescription(description);
-      setMinimumSkill(minimum_skill);
-      setScholarshipAvailable(scholarships_available);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (props.location.state.course) {
+  //     const {
+  //       title,
+  //       duration,
+  //       tuition,
+  //       description,
+  //       minimum_skill,
+  //       scholarships_available
+  //     } = props.location.state.course;
+  //     setTitle(title);
+  //     setDuration(duration);
+  //     setTuition(tuition);
+  //     setDescription(description);
+  //     setMinimumSkill(minimum_skill);
+  //     setScholarshipAvailable(scholarships_available);
+  //   }
+  // }, []);
 
   const handleChange = e => {
     const query = e.target.value;
     const target = e.target.name;
 
     switch (target) {
+      case 'bootcampId':
+        setBootcampId(query);
+        break;
       case 'title':
         setTitle(query);
         break;
@@ -65,10 +80,11 @@ export default function CourseForm(props) {
       tuition: parseInt(tuition),
       description,
       minimumSkill,
-      scholarshipsAvailable
+      scholarshipsAvailable,
+      bootcampId
     };
 
-    if (props.location.state.course) {
+    if (course) {
       fetch(
         `http://localhost:5000/api/v1/courses/${props.location.state.course.id}`,
         {
@@ -112,6 +128,19 @@ export default function CourseForm(props) {
         className='col-md-8 offset-md-2'
         onSubmit={e => handleFormSubmit(e)}
       >
+        {!course && (
+          <div className='form-group'>
+            <label>Bootcamp ID</label>
+            <input
+              type='number'
+              name='bootcampId'
+              className='form-control'
+              placeholder='Bootcamp ID'
+              value={bootcampId}
+              onChange={e => handleChange(e)}
+            />
+          </div>
+        )}
         <div className='form-group'>
           <label>Course Title</label>
           <input
@@ -190,7 +219,7 @@ export default function CourseForm(props) {
           </label>
         </div>
         <div className='form-group mt-4'>
-          {props.location.state.course ? (
+          {course ? (
             <input
               type='submit'
               value='Update Course'
