@@ -100,7 +100,8 @@ export default function Bootcamp(props) {
                     .join('-')
                     .toLowerCase()}`,
                   state: {
-                    bootcamp: bootcamp
+                    bootcamp: bootcamp,
+                    token: token
                   }
                 }}
                 className='btn btn-info btn-block my-3'

@@ -1,7 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '../../react-auth0-spa';
 
 export default function BootcampForm(props) {
-  const bootcamp = props.location ? props.location.state.bootcamp : null;
+  const { getTokenSilently } = useAuth0();
+  const [token, setToken] = useState();
+  useEffect(() => {
+    getTokenSilently().then(token => {
+      if (token) {
+        console.log(token);
+        setToken(token);
+      }
+    });
+  });
+
+  const { bootcamp } = props.location ? props.location.state : {};
 
   const [name, setName] = useState(bootcamp ? bootcamp.name : '');
   const [address, setAddress] = useState(bootcamp ? bootcamp.address : '');
@@ -15,6 +27,7 @@ export default function BootcampForm(props) {
   const [jobAssistance, setJobAssistance] = useState(
     bootcamp ? bootcamp['job_assistance'] : false
   );
+  const [upvotes, setUpvotes] = useState(bootcamp ? bootcamp['upvotes'] : null);
 
   const handleChange = e => {
     const query = e.target.value;
@@ -55,23 +68,24 @@ export default function BootcampForm(props) {
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    const data = {
-      name,
-      description,
-      website,
-      phone,
-      email,
-      address,
-      careers,
-      jobAssistance
-    };
-    console.log(data);
+
     if (bootcamp) {
+      const data = {
+        name,
+        description,
+        website,
+        phone,
+        email,
+        address,
+        careers,
+        jobAssistance,
+        upvotes
+      };
       fetch(`http://localhost:5000/api/v1/bootcamps/${bootcamp.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${props.token}`
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(data)
       })
@@ -82,11 +96,21 @@ export default function BootcampForm(props) {
           }
         });
     } else {
+      const data = {
+        name,
+        description,
+        website,
+        phone,
+        email,
+        address,
+        careers,
+        jobAssistance
+      };
       fetch('http://localhost:5000/api/v1/bootcamps', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${props.token}`
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(data)
       })
@@ -199,10 +223,10 @@ export default function BootcampForm(props) {
                     name='careers'
                     className='custom-select'
                     multiple
-                    defaultValue={careers}
+                    value={careers}
                     onChange={e => handleOptionsChange(e)}
                   >
-                    <option defaultValue>Select all that apply</option>
+                    <option>Select all that apply</option>
                     <option value='Web Development'>Web Development</option>
                     <option value='Mobile Development'>
                       Mobile Development

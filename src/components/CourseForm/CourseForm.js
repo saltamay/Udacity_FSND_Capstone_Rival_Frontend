@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '../../react-auth0-spa';
 
 export default function CourseForm(props) {
-  console.log(props.location);
-  const course = props.location ? props.location.state.course : null;
+  const { getTokenSilently } = useAuth0();
+  const [token, setToken] = useState();
+  useEffect(() => {
+    getTokenSilently().then(token => {
+      if (token) {
+        console.log(token);
+        setToken(token);
+      }
+    });
+  });
+
+  const { course } = props.location ? props.location.state : {};
 
   const [title, setTitle] = useState(course ? course.title : '');
   const [duration, setDuration] = useState(course ? course.duration : null);
@@ -19,27 +30,7 @@ export default function CourseForm(props) {
   const [bootcampId, setBootcampId] = useState(
     course ? course['bootcamp_id'] : null
   );
-
-  const { token } = props;
-
-  // useEffect(() => {
-  //   if (props.location.state.course) {
-  //     const {
-  //       title,
-  //       duration,
-  //       tuition,
-  //       description,
-  //       minimum_skill,
-  //       scholarships_available
-  //     } = props.location.state.course;
-  //     setTitle(title);
-  //     setDuration(duration);
-  //     setTuition(tuition);
-  //     setDescription(description);
-  //     setMinimumSkill(minimum_skill);
-  //     setScholarshipAvailable(scholarships_available);
-  //   }
-  // }, []);
+  const [upvotes, setUpvotes] = useState(course ? course['upvotes'] : null);
 
   const handleChange = e => {
     const query = e.target.value;
@@ -74,28 +65,24 @@ export default function CourseForm(props) {
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    const data = {
-      title,
-      duration: parseInt(duration),
-      tuition: parseInt(tuition),
-      description,
-      minimumSkill,
-      scholarshipsAvailable,
-      bootcampId
-    };
-
     if (course) {
-      fetch(
-        `http://localhost:5000/api/v1/courses/${props.location.state.course.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(data)
-        }
-      )
+      const data = {
+        title,
+        duration: parseInt(duration),
+        tuition: parseInt(tuition),
+        description,
+        minimumSkill,
+        scholarshipsAvailable,
+        upvotes
+      };
+      fetch(`http://localhost:5000/api/v1/courses/${course.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+      })
         .then(res => res.json())
         .then(res => {
           if (res.success) {
@@ -103,6 +90,15 @@ export default function CourseForm(props) {
           }
         });
     } else {
+      const data = {
+        title,
+        duration: parseInt(duration),
+        tuition: parseInt(tuition),
+        description,
+        minimumSkill,
+        scholarshipsAvailable,
+        bootcampId
+      };
       fetch('http://localhost:5000/api/v1/courses', {
         method: 'POST',
         headers: {

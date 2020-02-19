@@ -56,7 +56,7 @@ function App() {
     {
       name: 'Codemasters',
       description:
-        'Is coding your passion? Codemasters will give you the skills and the tools to become the best developer possible. We specialize in full stack web development and data science',
+        'Is coding your passion? Codemasters will give you the skills and the tools to become the best developer possible. We specialize in full stack web development and data science.',
       website: 'https://codemasters.com',
       phone: '(333) 333-3333',
       email: 'enroll@codemasters.com',

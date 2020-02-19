@@ -83,7 +83,8 @@ export default function Course(props) {
                     .join('-')
                     .toLowerCase()}`,
                   state: {
-                    course: course
+                    course: course,
+                    token: token
                   }
                 }}
                 className='btn btn-info btn-block my-3'
