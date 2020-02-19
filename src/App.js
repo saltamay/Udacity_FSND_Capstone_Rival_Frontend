@@ -206,7 +206,6 @@ function App() {
 
   getTokenSilently().then(token => {
     if (token) {
-      console.log(jwt_decode(token));
       if (
         jwt_decode(token).permissions.some(permmission =>
           permmission.includes('add:courses')
@@ -214,7 +213,7 @@ function App() {
       ) {
         setRole('admin');
         setToken(token);
-        console.log(role);
+        // console.log(role);
       }
     }
   });

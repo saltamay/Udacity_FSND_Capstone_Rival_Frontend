@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { FaCaretUp } from 'react-icons/fa';
 
 export default function CourseCard(props) {
-  // const { id, title } = props.course;
+  const { title, upvotes } = props.course;
+  const { name } = props.bootcamp;
   return (
     <div className='col-md'>
       <div className='card mb-3'>
@@ -23,17 +24,21 @@ export default function CourseCard(props) {
                   }}
                   className='text-dark font-weight-bold'
                 >
-                  {props.course.title}
+                  {title}
                 </Link>
               </h5>
-              {/* <span className='badge badge-danger mb-2'>{address}</span>
-              <p className='card-text'>{careers.join(', ')}</p> */}
+              <span className='badge badge-danger mb-2'>{name}</span>
+              {/* {/* <span className='badge badge-danger mb-2'>{address}</span> */}
+              {/* <p className='card-text'>{careers.join(', ')}</p> */}
             </div>
           </div>
           <div className='col-md-3 d-flex align-items-center justify-content-center'>
             <button type='button' className='btn btn-light pl-4 pr-4'>
-              <FaCaretUp size={24} />
-              <div>98</div>
+              <React.Fragment>
+                <FaCaretUp size={24} />
+                <br />
+                {upvotes}
+              </React.Fragment>
             </button>
           </div>
         </div>

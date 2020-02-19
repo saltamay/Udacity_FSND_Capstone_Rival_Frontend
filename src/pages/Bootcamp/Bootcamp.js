@@ -1,25 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import CourseDetails from '../../components/CourseDetails/CourseDetails';
+import './Bootcamp.css';
 
 export default function Bootcamp(props) {
   const { role, token, handleBootcampDelete } = props;
   const [bootcamp, setBootcamp] = useState(props.location.state.bootcamp);
+  console.log(bootcamp['img_url']);
   const history = useHistory();
   const handleRouteChange = () => {
     history.push('/');
   };
-  // useEffect(() => {
-  //   fetch(`http://localhost:5000/api/v1/bootcamps/${id}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   })
-  //     .then(res => res.json())
-  //     .then(res => setBootcamp(res.data))
-  //     .catch(err => console.log(err));
-  // }, [id]);
 
   const [courses, setCourses] = useState([]);
   useEffect(() => {
@@ -72,10 +63,14 @@ export default function Bootcamp(props) {
           ))}
         </div>
         <div className='col-md-4'>
-          {/* <img src='img/image_1.jpg' className='img-thumbnail' alt='' /> */}
+          <img
+            src={`/assets/${bootcamp['img_url']}`}
+            className='img-thumbnail'
+            alt='...'
+          />
           <h1 className='text-center my-4'>
             <span className='badge badge-secondary badge-success rounded-circle p-3'>
-              8.8
+              {bootcamp.upvotes}
             </span>{' '}
             Rating
           </h1>
