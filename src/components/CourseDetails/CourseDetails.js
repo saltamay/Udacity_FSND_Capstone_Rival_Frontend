@@ -19,7 +19,8 @@ export default function CourseDetails(props) {
           <li className='list-group-item'>Cost: ${tuition} USD</li>
           <li className='list-group-item'>Skill Required: {minimum_skill}</li>
           <li className='list-group-item'>
-            Scholarship Available: <i className='fas fa-check text-success'></i>{' '}
+            Scholarship Available:{' '}
+            {scholarships_available ? 'Available' : 'Not Available'}
           </li>
         </ul>
       </div>

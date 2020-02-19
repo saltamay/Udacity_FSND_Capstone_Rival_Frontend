@@ -12,6 +12,7 @@ import CourseForm from './components/CourseForm/CourseForm';
 import Course from './pages/Course/Course';
 
 function App() {
+  // eslint-disable-next-line
   const bootcampData = [
     {
       name: 'UofT SCS BootCamps',
@@ -80,7 +81,7 @@ function App() {
       job_assistance: true
     }
   ];
-
+  // eslint-disable-next-line
   const courseData = [
     {
       title: 'Front End Web Development',
@@ -196,7 +197,6 @@ function App() {
   }, []);
 
   const [role, setRole] = useState('user');
-  const [token, setToken] = useState();
 
   const { loading, getTokenSilently } = useAuth0();
 
@@ -206,15 +206,12 @@ function App() {
 
   getTokenSilently().then(token => {
     if (token) {
-      // console.log(token);
       if (
         jwt_decode(token).permissions.some(permmission =>
           permmission.includes('add:courses')
         )
       ) {
         setRole('admin');
-        setToken(token);
-        // console.log(role);
       }
     }
   });
@@ -238,7 +235,7 @@ function App() {
 
   const handleBootcampDelete = id => {
     const updatedBootcampsList = bootcamps.filter(
-      bootcamp => bootcamp.id != id
+      bootcamp => bootcamp.id !== id
     );
     setBootcamps(updatedBootcampsList);
   };
@@ -261,7 +258,7 @@ function App() {
   };
 
   const handleCourseDelete = id => {
-    const updatedCoursesList = courses.filter(course => course.id != id);
+    const updatedCoursesList = courses.filter(course => course.id !== id);
     setCourses(updatedCoursesList);
   };
 
@@ -273,16 +270,12 @@ function App() {
           <Bootcamps role={role} bootcamps={bootcamps} courses={courses} />
         </Route>
         <Route path='/add-bootcamp'>
-          <BootcampForm
-            token={token}
-            handleBootcampSubmit={handleBootcampSubmit}
-          />
+          <BootcampForm handleBootcampSubmit={handleBootcampSubmit} />
         </Route>
         <Route
           path='/edit-bootcamp/:title'
           render={props => (
             <BootcampForm
-              token={token}
               handleBootcampUpdate={handleBootcampUpdate}
               {...props}
             />
@@ -293,7 +286,6 @@ function App() {
           render={props => (
             <Bootcamp
               role={role}
-              token={token}
               handleBootcampDelete={handleBootcampDelete}
               {...props}
             />
@@ -304,34 +296,20 @@ function App() {
           render={props => (
             <Course
               role={role}
-              token={token}
               handleCourseDelete={handleCourseDelete}
               {...props}
             />
           )}
         />
         <Route path='/add-course'>
-          <CourseForm token={token} handleCourseSubmit={handleCourseSubmit} />
+          <CourseForm handleCourseSubmit={handleCourseSubmit} />
         </Route>
         <Route
           path='/edit-course/:title'
           render={props => (
-            <CourseForm
-              token={token}
-              handleCourseUpdate={handleCourseUpdate}
-              {...props}
-            />
+            <CourseForm handleCourseUpdate={handleCourseUpdate} {...props} />
           )}
         />
-
-        {/* <Route
-          path='/signup'
-          render={() => {
-            window.location.href =
-              'https://rivalapp.auth0.com/authorize?audience=rival&response_type=token&client_id=M9WAclI1q9Xx9PCQ7oIEqWF8s8087Fjl&redirect_uri=http://localhost:3000';
-            return null;
-          }}
-        /> */}
       </div>
     </Router>
   );

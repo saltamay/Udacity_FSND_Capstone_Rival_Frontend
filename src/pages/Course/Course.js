@@ -2,39 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 export default function Course(props) {
-  const { course } = props.location.state;
-  const { role, token, handleCourseDelete } = props;
+  const { id, token } = props.location.state;
+  const { role, handleCourseDelete } = props;
+
   const history = useHistory();
   const handleRouteChange = () => {
     history.push('/');
   };
 
-  // const [course, setCourse] = useState({});
-  // useEffect(() => {
-  //   fetch(`http://localhost:5000/api/v1/courses/${id}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   })
-  //     .then(res => res.json())
-  //     .then(res => setCourse(res.data))
-  //     .catch(err => console.log(err));
-  // }, [id]);
-
-  // const [courses, setCourses] = useState([]);
-  // useEffect(() => {
-  //   // Todo: fetch(`http://localhost:5000/api/v1/bootcamps/${id}/courses`)
-  //   fetch(`http://localhost:5000/api/v1/courses`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   })
-  //     .then(res => res.json())
-  //     .then(res => setCourses(res.data))
-  //     .catch(err => console.log(err));
-  // }, []);
+  const [course, setCourse] = useState({});
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/v1/courses/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => setCourse(res.data))
+      .catch(err => console.log(err));
+  }, [id]);
 
   const handleDelete = () => {
     fetch(`http://localhost:5000/api/v1/courses/${course.id}`, {
@@ -82,11 +70,11 @@ export default function Course(props) {
           {/* <img src='img/image_1.jpg' className='img-thumbnail' alt='' /> */}
           <h1 className='text-center my-4'>
             <span className='badge badge-secondary badge-success rounded-circle p-3'>
-              8.8
+              {course.upvotes}
             </span>{' '}
             Rating
           </h1>
-          {role === 'admin' && (
+          {role === 'admin' && course.title ? (
             <React.Fragment>
               <Link
                 to={{
@@ -109,7 +97,7 @@ export default function Course(props) {
                 Delete Course
               </button>
             </React.Fragment>
-          )}
+          ) : null}
           {role === 'user' && (
             <React.Fragment>
               <Link to='#' className='btn btn-dark btn-block my-3'>

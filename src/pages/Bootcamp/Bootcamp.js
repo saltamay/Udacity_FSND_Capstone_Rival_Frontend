@@ -1,26 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+
 import CourseDetails from '../../components/CourseDetails/CourseDetails';
 import './Bootcamp.css';
 
 export default function Bootcamp(props) {
-  const { role, token, handleBootcampDelete } = props;
-  const [bootcamp, setBootcamp] = useState(props.location.state.bootcamp);
+  const { role, handleBootcampDelete } = props;
+  const { id, token } = props.location.state;
   const history = useHistory();
+
   const handleRouteChange = () => {
     history.push('/');
   };
 
+  const [bootcamp, setBootcamp] = useState({});
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/v1/bootcamps/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => setBootcamp(res.data))
+      .catch(err => console.log(err));
+  }, []);
+
   const [courses, setCourses] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:5000/api/v1/bootcamps/${bootcamp.id}/courses`, {
+    fetch(`http://localhost:5000/api/v1/bootcamps/${id}/courses`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
     })
       .then(res => res.json())
-      .then(res => setCourses(res.data))
+      .then(res => {
+        if (res.success) setCourses(res.data);
+      })
       .catch(err => console.log(err));
   }, []);
 
@@ -73,7 +91,7 @@ export default function Bootcamp(props) {
             </span>{' '}
             Rating
           </h1>
-          {role === 'admin' && (
+          {role === 'admin' && bootcamp.name ? (
             <React.Fragment>
               <Link
                 to={{
@@ -99,7 +117,7 @@ export default function Bootcamp(props) {
                 Add Course
               </Link>
             </React.Fragment>
-          )}
+          ) : null}
           {role === 'user' && (
             <React.Fragment>
               <Link to='#' className='btn btn-dark btn-block my-3'>
@@ -113,6 +131,7 @@ export default function Bootcamp(props) {
           <a
             href={`//${bootcamp.website}`}
             target='_blank'
+            rel='noopener noreferrer'
             className='btn btn-secondary btn-block my-3'
           >
             Visit Website

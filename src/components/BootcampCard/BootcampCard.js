@@ -1,8 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCaretUp } from 'react-icons/fa';
+import { useAuth0 } from '../../react-auth0-spa';
+
 export default function Bootcamp(props) {
-  const { name, address, careers, upvotes, img_url } = props.bootcamp;
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { id, name, address, careers, upvotes, img_url } = props.bootcamp;
+
   return (
     <div className='col-md'>
       <div className='card mb-3'>
@@ -13,20 +17,31 @@ export default function Bootcamp(props) {
           <div className='col-md-6'>
             <div className='card-body'>
               <h5 className='card-title'>
-                <Link
-                  to={{
-                    pathname: `/bootcamps/${name
-                      .split(' ')
-                      .join('-')
-                      .toLowerCase()}`,
-                    state: {
-                      bootcamp: props.bootcamp
-                    }
-                  }}
-                  className='text-dark font-weight-bold'
-                >
-                  {name}
-                </Link>
+                {!isAuthenticated ? (
+                  <button
+                    type='button'
+                    className='btn btn-link text-dark font-weight-bold'
+                    onClick={() => loginWithRedirect({})}
+                  >
+                    {name}
+                  </button>
+                ) : (
+                  <Link
+                    to={{
+                      pathname: `/bootcamps/${name
+                        .split(' ')
+                        .join('-')
+                        .toLowerCase()}`,
+                      state: {
+                        id: id,
+                        token: props.token
+                      }
+                    }}
+                    className='text-dark font-weight-bold'
+                  >
+                    {name}
+                  </Link>
+                )}
               </h5>
               <span className='badge badge-danger mb-2'>{address}</span>
               <p className='card-text'>{careers.join(', ')}</p>

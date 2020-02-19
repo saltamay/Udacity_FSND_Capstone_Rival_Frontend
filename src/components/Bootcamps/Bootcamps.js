@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '../../react-auth0-spa';
 import BootcampCard from '../BootcampCard/BootcampCard';
 import CourseCard from '../CourseCard/CourseCard';
 
 export default function Bootcamps(props) {
+  const { getTokenSilently } = useAuth0();
+  const [token, setToken] = useState();
+  useEffect(() => {
+    getTokenSilently().then(token => {
+      if (token) {
+        console.log(token);
+        setToken(token);
+      }
+    });
+  });
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -14,6 +25,7 @@ export default function Bootcamps(props) {
               <BootcampCard
                 key={bootcamp.id}
                 bootcamp={bootcamp}
+                token={token}
                 role={props.role}
               />
             ))}
@@ -30,6 +42,7 @@ export default function Bootcamps(props) {
                 <CourseCard
                   key={course.id}
                   course={course}
+                  token={token}
                   bootcamp={bootcamp[0]}
                   role={props.role}
                 />
